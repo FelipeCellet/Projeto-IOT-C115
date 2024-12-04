@@ -36,8 +36,8 @@ def simulate_glucose_interaction(initial_glucose):
                 food_value = float(input("Quantos gramas de carboidratos você consumiu? "))
                 glucose_increase = food_value * 2  # Aumento proporcional ao carboidrato
                 print(f"Glicemia aumentando em ~{glucose_increase} mg/dL...")
-                for i in range(5):  # Simula o aumento gradual
-                    glucose_level += glucose_increase / 5
+                for i in range(10):  # Publica a cada 1 segundo após ação
+                    glucose_level += glucose_increase / 10
                     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     data = {"timestamp": timestamp, "glucose_level": round(glucose_level, 1)}
                     publish_data(client, topic, data)
@@ -47,8 +47,8 @@ def simulate_glucose_interaction(initial_glucose):
                 insulin_units = float(input("Quantas unidades de insulina você injetou? "))
                 glucose_decrease = insulin_units * 10  # Redução proporcional à insulina
                 print(f"Glicemia diminuindo em ~{glucose_decrease} mg/dL...")
-                for i in range(5):  # Simula a redução gradual
-                    glucose_level -= glucose_decrease / 5
+                for i in range(10):  # Publica a cada 1 segundo após ação
+                    glucose_level -= glucose_decrease / 10
                     if glucose_level < 0:
                         glucose_level = 0  # Evita glicemia negativa
                     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -61,6 +61,7 @@ def simulate_glucose_interaction(initial_glucose):
                 data = {"timestamp": timestamp, "glucose_level": round(glucose_level, 1)}
                 publish_data(client, topic, data)
                 print(f"Glicemia atual publicada: {round(glucose_level, 1)} mg/dL")
+                time.sleep(5)  # Intervalo padrão para monitoramento
 
             elif choice == "0":
                 print("Encerrando simulação...")
@@ -91,7 +92,7 @@ def main():
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 data = {"timestamp": timestamp, "glucose_level": glucose_level}
                 publish_data(client, topic, data)
-                time.sleep(5)
+                time.sleep(5)  # Publicação a cada 5 segundos
         except KeyboardInterrupt:
             print("\nModo automático encerrado.")
             client.disconnect()
